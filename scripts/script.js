@@ -1,4 +1,5 @@
-// Part 1 ----------------------------------------------------------------
+// Part 1: Getting Started --------------------------------------
+// Step 1 
 // Select and cache the <main> element in a variable named mainEl.
 const mainEl = document.querySelector('main');  //<main></main>
 console.log(mainEl);
@@ -17,8 +18,8 @@ mainEl.classList.add("flex-ctr");
 console.log(mainEl);
 // Hint: Use the Element.classList API.
 
-// Part 2 ----------------------------------------------
-// Part 2: Creating a Menu Bar
+
+// Step 2: Creating a Menu Bar
 // Next, create a blank menu bar that we can use to later add some interactivity to the page:
 // 1) Select and cache the <nav id="top-menu"> element in a variable named topMenuEl.
 let topMenuEl = document.getElementById(`top-menu`);
@@ -31,7 +32,7 @@ topMenuEl.style.backgroundColor = `var(--top-menu-bg)`;
 topMenuEl.classList.add('flex-around');
 console.log(topMenuEl);
 
-// Part 3 --------------------------------------------------
+// Step 3 
 // Menu data structure
 var menuLinks = [
   { text: 'about', href: '/about' },
@@ -58,6 +59,9 @@ for (let link of menuLinks){
     topMenuEl.appendChild(menuButton);
 
 }
+
+
+
 
 
 
