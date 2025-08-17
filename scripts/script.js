@@ -19,20 +19,21 @@ mainEl.classList.add("flex-ctr");
 // Hint: Use the Element.classList API.
 
 
-// Step 2: Creating a Menu Bar
+// Step 2: Creating a Menu Bar - Top Menu Bar
 // Next, create a blank menu bar that we can use to later add some interactivity to the page:
 // 1) Select and cache the <nav id="top-menu"> element in a variable named topMenuEl.
 let topMenuEl = document.getElementById(`top-menu`);
 // 2) Set the height of the topMenuEl element to be 100%.
 topMenuEl.style.height = `100%`;
-console.log(topMenuEl);
+//console.log(topMenuEl);
 // 3) Set the background color of topMenuEl to the value stored in the --top-menu-bg CSS custom property.
 topMenuEl.style.backgroundColor = `var(--top-menu-bg)`;
 // 4) Add a class of flex-around to topMenuEl.
 topMenuEl.classList.add('flex-around');
 //console.log(topMenuEl);
 
-// Step 3 
+
+// ------------------------  Part 4: Adding Menu Interaction ------------------------
 // Menu data structure
 var menuLinks = [
   { text: 'about', href: '/about' },
@@ -59,30 +60,42 @@ var menuLinks = [
 ];
 
 
-// Iterate over the entire menuLinks array and for each "link" object:
+// Iterate over the entire menuLinks array and for each "link" object (in the first layer of the array):
 for (let link of menuLinks) {
-  // console.log(link) // shows that it iterates each object in the array.
+  //console.log(link) // shows that it iterates each object in the array.
   // Create an <a> element.
   let menuButton = document.createElement('a');
   // console.log(menuButton); 
   // On the new element, add an href attribute with its value set to the href property of the "link" object.
   menuButton.setAttribute("href", link.href);
-  console.log(menuButton);
+  //console.log(menuButton);
   // Set the new element's content to the value of the text property of the "link" object.
   menuButton.textContent = link.text;
-
   //console.log(menuButton)
   // Append the new element to the topMenuEl element.
-
   topMenuEl.appendChild(menuButton);
+ 
 
 }
 
+// topMenuEl stores the <nav> and child <a> elements
+console.log(topMenuEl);
+//<nav id="top-menu" 
+// class="flex-around" 
+// style="height: 100%; 
+// background-color: var(--top-menu-bg);"
+// >
+// <a href="/about">about</a>
+// <a href="#">catalog</a>
+// <a href="#">orders</a>
+// <a href="#">account</a>
+// </nav>
 
-// Part 3: Creating the SubMenu -------------------------------------------------
+
+// -----------------------  Part 3: Creating the SubMenu ---------------------------------
 // Select and cache the <nav id="sub-menu"> element in a variable named subMenuEl.
 let subMenuEl = document.getElementById('sub-menu');
-console.log(subMenuEl);
+//console.log(subMenuEl);
 // Set the height subMenuEl element to be "100%".
 subMenuEl.style.height = `100%`;
 //console.log(subMenuEl);
@@ -95,48 +108,94 @@ subMenuEl.style.position = 'absolute';
 subMenuEl.style.top = '0';
 // Set the CSS top property of subMenuEl to the value of 0.
 
-// Part 4: Adding Menu Interaction
+// ------------------------  Part 4: Adding Menu Interaction ------------------------
+// Get the <a> elements and save them in topMenuLinks as an array of length 4
 let topMenuLinks = document.getElementsByTagName('a');
-console.log(topMenuLinks);
+//console.log(topMenuLinks); // [a,a,a,a]
 
+//event listener initated by a mouse click and calls topMenuClick()
 topMenuEl.addEventListener('click', topMenuClick);
 
 
+//topMenuClick function will pass the event object which will do the following:
 function topMenuClick(e) {
   e.preventDefault();
 
+  // If click on an area that is not an <a> tag name, then exit function
   if (e.target.tagName !== 'A') {
     return;
   }
 
+  // Add "class = active" attribute to the <a> link clicked
   e.target.classList.add('active');
 
+  // lopp each <a> element item in the topMenuLinks array 
+  // save each <a> in topLink in each loop
   for (let topLink of topMenuLinks) {
 
+    // check if the topLink is not the same as the active one pressed before
+    // if so, remove the class "active" from the <a> clicked
     if (topLink !== e.target) {
       topLink.classList.remove('active');
 
     } else {
-      console.log(e.target.innerText)
-
+      // log to make sure the e.target is the one clicked (Noted: it's captialized)
+      //console.log(e.target.innerText)
+      //search through the menuLinks array to find the object that has the matching
+      //text of the link clicked. 
+      // e.target.innerText has to be converted to lowercase to match the text in e.target.innerText)
       let obj = menuLinks.find(item => item.text === e.target.innerText.toLowerCase())
       console.log("object", obj)
 
+      //------------------------  Part 5: Adding SubMenu Interaction ------------------------
       // Within the event listener, if the clicked <a> element does not yet have a class of "active" (it was inactive when clicked):
-      // If the clicked <a> element's "link" object within menuLinks has a subLinks property (all do, except for the "link" object for ABOUT), set the CSS top property of subMenuEl to 100%.
-      if (obj?.subLinks) {
+      // If the clicked <a> element's "link" object within menuLinks has a subLinks property,  (all do, except for the "link" object for ABOUT)
+      if (obj?.subLinks) { //
+        // set the CSS top property of subMenuEl to 100%.
+        // Otherwise, set the CSS top property of subMenuEl to 0.
+        // Hint: Caching the "link" object will come in handy for passing its subLinks array later.
         subMenuEl.style.top = subMenuEl.style.top === "0px" ? "100%": "0px";
+
+        //pass the obj.subLinks[] array in this function
+        buildSubmenu(obj.subLinks);
+
       } 
+
       
     }
-
-
   }
-  
-  // Otherwise, set the CSS top property of subMenuEl to 0.
-  // Hint: Caching the "link" object will come in handy for passing its subLinks array later.
 
 }
+
+
+
+// Create a helper function called buildSubmenu that does the following:
+// - Take the subLinks[] array as argument
+// - Clear the subMenuEl array
+// - Iterate through the subMenuEl[] array, 
+//   create <a> tags for each object.text and object.href value
+function buildSubmenu (subLinksArray){
+  // Clear the current contents of subMenuEl.
+  subMenuEl.innerHTML = null;
+
+  for (let link of subLinksArray) {
+  // Iterate over the subLinks array, passed as an argument, and for each "link" object:
+  console.log(link) // shows that it iterates each object in the array.
+  // Create an <a> element.
+  let subMenuButton = document.createElement('a');
+  //console.log(subMenuButton); 
+  // // Add an href attribute to the <a>, with the value set by the href property of the "link" object.
+  //console.log(subMenuButton);
+  // Set the new element's content to the value of the text property of the "link" object.
+  subMenuButton.textContent = link.text;
+  console.log(subMenuButton);
+  // Append the new element to the subMenuEl.
+  subMenuEl.appendChild(subMenuButton);
+  }
+
+
+}
+
 
 
 
