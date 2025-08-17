@@ -136,7 +136,7 @@ function topMenuClick(e) {
   // lopp each <a> element item in the topMenuLinks array 
   // save each <a> in topLink in each loop
   for (let topLink of topMenuLinks) {
-
+    
     // check if the topLink is not the same as the active one pressed before
     // if so, remove the class "active" from the <a> clicked
     if (topLink !== e.target) {
@@ -157,18 +157,23 @@ function topMenuClick(e) {
       if (obj?.subLinks) { //
         // set the CSS top property of subMenuEl to 100%.
         // Otherwise, set the CSS top property of subMenuEl to 0.
-        // Hint: Caching the "link" object will come in handy for passing its subLinks array later.
         subMenuEl.style.top = subMenuEl.style.top === "0px" ? "100%" : "0px";
 
         //pass the obj.subLinks[] array in this function to build the submenu
         let subMenuLinks = buildSubmenu(obj.subLinks);
-        console.log(subMenuLinks);
+        //console.log(subMenuLinks);
 
         // Attach a delegated 'click' event listener to subMenuEl.
         // Pass the arguements e and topLink to subMenuClick function
         subMenuEl.addEventListener('click', (e) => ( subMenuClick(e, topLink) ));
-
+      } else {
+        // The ABOUT link is clicked, <h1>About</h1> should be displayed.
+        // subMenu top is set to 0px so the sub menu go back behind top menu
+        // An <h1></h1> child tag is created in <main> block with the innerText content of "about" <a>
+        subMenuEl.style.top = "0px";
+        mainEl.appendChild(h1).textContent = e.target.innerText;
       }
+
     }
   }
 
@@ -189,29 +194,22 @@ function subMenuClick(e, topLink) {
     return;
   }
   // Log the content of the <a> to verify the handler is working.
-  console.log(e.target.innerHTML);
+  //console.log(e.target.innerHTML);
 
   // Next, the event listener should set the CSS top property of subMenuEl to 0.
   subMenuEl.style.top = '0';
+  
 
   // Remove the active class from each <a> element in topMenuLinks.
   if (topLink !== e.target) {
-    console.log(`The currently button clicked is: ${topLink}`);
     topLink.classList.remove('active')
-  }
+  } 
 
-  
+  console.log(e);
+// Update the contents of mainEl, within an <h1>, to the contents of the <a> element clicked within subMenuEl.
+  mainEl.appendChild(h1).textContent = e.target.innerText;
 
-
-
-
-
-
-    
-    // Update the contents of mainEl, within an <h1>, to the contents of the <a> element clicked within subMenuEl.
-    // If the ABOUT link is clicked, an <h1>About</h1> should be displayed.
-
-  }
+}
 
 
   /***************************** Helper Functions ********************************/
@@ -240,7 +238,6 @@ function subMenuClick(e, topLink) {
     }
     //console.log(subMenuEl);
     return subMenuEl;
-
 
   }
 
